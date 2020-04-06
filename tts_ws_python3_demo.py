@@ -172,7 +172,7 @@ if __name__ == "__main__":
     # 测试时候在此处正确填写相关信息即可运行
     wsParam = Ws_Param(APPID='5a745aeb', APIKey='e4c1396352623f2983348de261b2cbc9',
                        APISecret='899165f74ac32db58b21873174eae023',
-                       Text="查询到以下信息")
+                       Text="任务完成")
     websocket.enableTrace(False)
     wsUrl = wsParam.create_url()
     ws = websocket.WebSocketApp(wsUrl, on_message=on_message, on_error=on_error, on_close=on_close)
