@@ -109,7 +109,7 @@ def on_message(ws, message):
                     result += w["w"]
             #print("sid:%s call success!,data is:%s" % (sid, json.dumps(data, ensure_ascii=False)))
             #
-            print(result)
+            print('我：'+result)
             message_handler(result)
     except Exception as e:
         print("receive msg,but parse exception:", e)
@@ -186,7 +186,7 @@ def reco(fname):
     ws.on_open = on_open
     ws.run_forever(sslopt={"cert_reqs": ssl.CERT_NONE})
     time2 = datetime.now()
-    print(time2-time1)
+    #print(time2-time1)
 
 if __name__ == "__main__":
     # 测试时候在此处正确填写相关信息即可运行

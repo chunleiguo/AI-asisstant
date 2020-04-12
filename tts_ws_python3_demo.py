@@ -30,6 +30,7 @@ import _thread as thread
 import os
 import snowboydecoder
 import time
+from tuling import get_tuling
 
 STATUS_FIRST_FRAME = 0  # 第一帧的标识
 STATUS_CONTINUE_FRAME = 1  # 中间帧标识
@@ -47,7 +48,7 @@ class Ws_Param(object):
         # 公共参数(common)
         self.CommonArgs = {"app_id": self.APPID}
         # 业务参数(business)，更多个性化参数可在官网查看
-        self.BusinessArgs = {"aue": "raw", "auf": "audio/L16;rate=16000", "vcn": "x2_yezi", "tte": "utf8","ent":"aisound"}
+        self.BusinessArgs = {"aue": "raw", "auf": "audio/L16;rate=16000", "vcn": "x2_xiaoxuan", "tte": "utf8","ent":"aisound"}
         self.Data = {"status": 2, "text": str(base64.b64encode(self.Text.encode('utf-8')), "UTF8")}
         #使用小语种须使用以下方式，此处的unicode指的是 utf16小端的编码方式，即"UTF-16LE"”
         #self.Data = {"status": 2, "text": str(base64.b64encode(self.Text.encode('utf-16')), "UTF8")}
@@ -129,7 +130,7 @@ def on_open(ws):
              "data": wsParam.Data
              }
         d = json.dumps(d)
-        print("------>开始发送文本数据",wsParam.Text)
+        #print("------>开始发送文本数据",wsParam.Text)
         ws.send(d)
         if os.path.exists('./demo.pcm'):
             os.remove('./demo.pcm')
@@ -145,22 +146,23 @@ def message_handler(text):
     # 测试时候在此处正确填写相关信息即可运行
 
     global wsParam
-    print(len(text))
+    #print(len(text))
     if len(text) ==0:
         play_pcm('resources/baoqian.pcm') 
         return  
     elif len(text) < 2:
         return
     else: 
-        play_pcm('resources/chaxuning.pcm')
+        #play_pcm('resources/chaxuning.pcm')
+        response = get_tuling(text)
 
-    time.sleep(1)
-    play_pcm('resources/chaxundao.pcm')
+    #time.sleep(1)
+    #play_pcm('resources/chaxundao.pcm')
 
-    print('.......')
+    print('小白：' + response)
     wsParam = Ws_Param(APPID='5a745aeb', APIKey='e4c1396352623f2983348de261b2cbc9',
                        APISecret='899165f74ac32db58b21873174eae023',
-                       Text=text)
+                       Text=response)
     websocket.enableTrace(False)
     wsUrl = wsParam.create_url()
     ws = websocket.WebSocketApp(wsUrl, on_message=on_message, on_error=on_error, on_close=on_close)
