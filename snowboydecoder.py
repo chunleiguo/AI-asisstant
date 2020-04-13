@@ -52,6 +52,9 @@ class RingBuffer(object):
         tmp = bytes(bytearray(self._buf))
         self._buf.clear()
         return tmp
+    def clear(self):
+        """clears buffer"""
+        self._buf.clear()
 
 
 def play_audio_file(fname=DETECT_DING):
@@ -129,7 +132,7 @@ class HotwordDetector(object):
               interrupt_check=lambda: False,
               sleep_time=0.03,
               audio_recorder_callback=None,
-              silent_count_threshold=15,
+              silent_count_threshold=8,
               recording_timeout=100):
         """
         Start the voice detector. For every `sleep_time` second it checks the
@@ -198,6 +201,7 @@ class HotwordDetector(object):
                 break
             data = self.ring_buffer.get()
             if len(data) == 0:
+                #print('len is zero')
                 time.sleep(sleep_time)
                 continue
 
@@ -215,10 +219,11 @@ class HotwordDetector(object):
                     message = "Keyword " + str(status) + " detected at time: "
                     message += time.strftime("%Y-%m-%d %H:%M:%S",
                                          time.localtime(time.time()))
-                    logger.info(message)
+                    #logger.info(message)
                     callback = detected_callback[status-1]
                     if callback is not None:
                         callback()
+                        self.ring_buffer.clear() #drop the wakeup response
 
                     if audio_recorder_callback is not None:
                         state = "ACTIVE"
@@ -239,6 +244,8 @@ class HotwordDetector(object):
                 if stopRecording == True:
                     fname = self.saveMessage()
                     audio_recorder_callback(fname)
+                    self.ring_buffer.clear()
+                    #print('one round over')
                     state = "PASSIVE"
                     continue
 

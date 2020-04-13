@@ -96,7 +96,7 @@ def on_message(ws, message):
         status = message["data"]["status"]
         #print(message)
         if status == 2:
-            print("ws is closed")
+            #print("ws is closed")
             ws.close()
         if code != 0:
             errMsg = message["message"]
@@ -110,7 +110,7 @@ def on_message(ws, message):
         print("receive msg,but parse exception:", e)
     if status == 2:
         play_pcm('./demo.pcm')
-        print('read it out')
+        #print('read it out')
 
 # 收到websocket错误的处理
 def on_error(ws, error):
@@ -138,8 +138,8 @@ def on_open(ws):
     thread.start_new_thread(run, ())
 
 def play_pcm(fname):
-    cmd = 'aplay -t raw  -f S16_LE -r 16000 ' + fname
-    print(cmd)
+    cmd = 'aplay -t raw -q -f S16_LE -r 16000 ' + fname
+    #print(cmd)
     os.system(cmd)
 
 def message_handler(text):
@@ -174,7 +174,7 @@ if __name__ == "__main__":
     # 测试时候在此处正确填写相关信息即可运行
     wsParam = Ws_Param(APPID='5a745aeb', APIKey='e4c1396352623f2983348de261b2cbc9',
                        APISecret='899165f74ac32db58b21873174eae023',
-                       Text="任务完成")
+                       Text="我在")
     websocket.enableTrace(False)
     wsUrl = wsParam.create_url()
     ws = websocket.WebSocketApp(wsUrl, on_message=on_message, on_error=on_error, on_close=on_close)

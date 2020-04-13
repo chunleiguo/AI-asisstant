@@ -7,10 +7,10 @@ from iat_ws_python3 import reco, Ws_Param
 interrupted = False
 
 def audioRecorderCallback(fname):
-    print("converting audio to text")
+    #print("converting audio to text")
     #snowboydecoder.play_audio_file(fname)
     reco(fname)
-    #os.remove(fname)
+    os.remove(fname)
 
 def signal_handler(signal, frame):
     global interrupted
